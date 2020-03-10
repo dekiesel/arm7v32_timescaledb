@@ -1,6 +1,6 @@
 # arm7v32_timescaledb
 
-A timescaledb-postgis docker-container that runs on raspberry pi's/arm7v32-processors. 
+A `timescaledb-postgis` docker-container that runs on raspberry pi's/arm7v32-processors. 
 
 # Usage
 
