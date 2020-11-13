@@ -1,4 +1,5 @@
-ARG PG_VERSION=11
+#ARG PG_VERSION=11
+ARG PG_VERSION=${PG_VERSION}
 FROM arm32v7/golang:1.14-alpine AS tools
 MAINTAINER David Kesselheim
 ############################
@@ -30,7 +31,7 @@ RUN set -ex && apk update && apk add --no-cache git \
 FROM arm32v7/postgres:${PG_VERSION}-alpine
 ARG PG_VERSION
 
-ENV TIMESCALEDB_VERSION 1.6.0
+ENV TIMESCALEDB_VERSION ${TIMESCALEDB_VERSION}
 
 COPY --from=tools /go/bin/* /usr/local/bin/
 
