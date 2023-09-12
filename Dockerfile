@@ -30,6 +30,7 @@ RUN set -ex && apk update && apk add --no-cache git \
 ############################
 FROM arm32v7/postgres:${PG_VERSION}-alpine
 ARG PG_VERSION
+ARG TIMESCALEDB_VERSION
 
 ENV TIMESCALEDB_VERSION ${TIMESCALEDB_VERSION}
 
@@ -42,6 +43,7 @@ RUN set -ex \
                 openssl \
                 openssl-dev \
                 tar \
+                krb5-dev \
     && mkdir -p /build/ \
     && git clone https://github.com/timescale/timescaledb /build/timescaledb \
     \
@@ -94,6 +96,11 @@ RUN set -ex \
     && wget -q https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz -O - \
         | tar xz -C proj --strip-components=1 \
     && cd proj\
+    && mkdir build\
+    && cd build\
+    && cmake ..\
+    && cmake --build .\
+    && cmake --build . --target install\
     && ./configure --prefix=/usr --disable-static --enable-lto \
     && make -j$(nproc) \
     && make install \
@@ -107,7 +114,8 @@ RUN set -ex \
         unset CC; \
         unset CXX; \
     fi \
-    && cd .. \
+    && cd ../.. \
+haven't continued with anything f.o.m here. Timescaledb now seems to publish arm containers. I haven't checked though!
     && rm -rf proj \
     && for i in /build_proj/usr/lib/*; do strip -s $i 2>/dev/null || /bin/true; done \
     && for i in /build_proj/usr/bin/*; do strip -s $i 2>/dev/null || /bin/true; done
